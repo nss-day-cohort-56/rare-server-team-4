@@ -10,7 +10,7 @@
             "publication_date": "2022-08-15",
             "image_url": "",
             "content": "Test Post Content",
-            "approved": "False" 
+            "approved": false 
         }
     }
 ]
