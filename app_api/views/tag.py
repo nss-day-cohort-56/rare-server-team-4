@@ -3,6 +3,7 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
 from app_api.models import Tag
+from ..models.post import Post
 
 
 class TagView(ViewSet):
@@ -46,7 +47,7 @@ class TagView(ViewSet):
         )
 
         serializer = TagSerializer(tag)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     def update(self, request, pk):
         """Handle PUT requests for a tag
@@ -58,7 +59,15 @@ class TagView(ViewSet):
         tag.label=request.data["label"]
 
         tag_post = Post.objects.get(pk =request.data["post"])
-        tag.tag_post = 
+        tag.tag_post = tag_post
+        tag.save()
+
+        return Response(None, status.HTTP_204_NO_CONTENT)
+
+    def destroy(self, request, pk):
+        tag = Tag.objects.get(pk=pk)
+        tag.delete()
+        return Response(None, status=status.HTTP_204_NO_CONTENT)
 
 
 class TagSerializer(serializers.ModelSerializer):
