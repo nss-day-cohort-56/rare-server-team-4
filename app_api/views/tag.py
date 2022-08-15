@@ -39,11 +39,10 @@ class TagView(ViewSet):
         Returns:
             Response --JSON serialized tag instance
             """
-        post = Post.objects.get(pk=request.data["post"])
+        # post = Post.objects.get(pk=request.data["post"])
 
         tag = Tag.objects.create(
-            label=request.data["label"],
-            post=post
+            label=request.data["label"]
         )
 
         serializer = TagSerializer(tag)
@@ -58,8 +57,8 @@ class TagView(ViewSet):
         tag = Tag.objects.get(pk=pk)
         tag.label=request.data["label"]
 
-        tag_post = Post.objects.get(pk =request.data["post"])
-        tag.tag_post = tag_post
+        # tag_post = Post.objects.get(pk =request.data["post"])
+        # tag.tag_post = tag_post
         tag.save()
 
         return Response(None, status.HTTP_204_NO_CONTENT)

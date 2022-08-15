@@ -1,0 +1,11 @@
+[
+    {
+        "model": "app_api.comment",
+        "pk": 1,
+        "fields": {
+            "author_id": 1,
+            "post_id": 1,
+            "content": "I disagree with this post."
+        }
+    }
+]
