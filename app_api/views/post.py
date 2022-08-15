@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import serializers, status
 from app_api.models import Post
 from django.db.models import Q
-from app_api.models import RareUser
+from app_api.models import RareUser, Category
 
 
 class PostView(ViewSet):
@@ -55,7 +55,7 @@ class PostView(ViewSet):
         Returns
             Response -- JSON serialized post instance
         """
-        user = User.objects.get(user=request.auth.user)
+        user = RareUser.objects.get(user=request.auth.user)
         category = Category.objects.get(pk=request.data["category_id"])
 
         post = Post.objects.create(
@@ -80,7 +80,7 @@ class PostView(ViewSet):
         Returns:
             Response -- Empty body with 204 status code
         """
-        user = User.objects.get(user=request.auth.user)
+        user = RareUser.objects.get(user=request.auth.user)
 
         post = Post.objects.get(pk=pk)
         if user.id != post.user.id:
