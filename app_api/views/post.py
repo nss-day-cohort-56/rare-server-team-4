@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import serializers, status
 from app_api.models import Post
 from django.db.models import Q
-from app_api.models.user import User
+from app_api.models import RareUser
 
 
 class PostView(ViewSet):
