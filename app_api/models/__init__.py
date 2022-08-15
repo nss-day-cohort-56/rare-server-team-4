@@ -1,1 +1,1 @@
-from .rare_user import RareUser
+from .users import RareUser
