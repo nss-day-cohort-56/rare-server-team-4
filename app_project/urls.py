@@ -15,10 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
+from rest_framework import routers
 from app_api.views import register_user, login_user
+from app_api.views import PostView
+
+router = routers.DefaultRouter(trailing_slash=False)
+router.register(r'posts', PostView, 'post')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('register', register_user),
     path('login', login_user),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
