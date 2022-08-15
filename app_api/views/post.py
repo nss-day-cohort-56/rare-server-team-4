@@ -18,7 +18,6 @@ class PostView(ViewSet):
         try:
             post = Post.objects.get(pk=pk)
             user = RareUser.objects.get(user=request.auth.user)
-            # game.is_owner = player.id == game.player.id
             serializer = PostSerializer(post)
             return Response(serializer.data)
         except Post.DoesNotExist as ex:
