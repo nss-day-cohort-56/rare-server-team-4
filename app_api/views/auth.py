@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
-from app_api.models import RareUser, rare_user
+from app_api.models import RareUser, users
 
 
 @api_view(['POST'])

@@ -22,7 +22,7 @@ from app_api.views import CategoryView, PostView
 from django.conf import settings
 from django.conf.urls.static import static
 
-from ..app_api.views.tag import TagView
+from app_api.views.tag import TagView
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'posts', PostView, 'post')

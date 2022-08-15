@@ -3,7 +3,7 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
 from app_api.models import Tag
-from ..models.post import Post
+from app_api.models.post import Post
 
 
 class TagView(ViewSet):
