@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
+from app_api.models import RareUser, rare_user
 
 
 @api_view(['POST'])
@@ -45,10 +46,15 @@ def register_user(request):
     new_user = User.objects.create_user(
         username=request.data['username'],
         password=request.data['password'],
+        first_name=request.data['first_name'],
+        last_name=request.data['last_name']
     )
 
     # TODO: If you're using a model with a 1 to 1 relationship to the django user, create that object here
-
+    rare_user = RareUser.objects.create(
+        bio=request.data['bio'],
+        user=new_user
+    )
     
     token = Token.objects.create(user=new_user)
     # TODO: If you need to send the client more information update the data dict
