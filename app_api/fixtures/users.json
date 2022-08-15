@@ -10,9 +10,8 @@
             "first_name": "Michael",
             "last_name": "O'Brien",
             "email": "me@me.com",
-            "profile_image_url": "",
-            "created_on": "2020-08-28T14:51:39.989Z",
-            "active": true
+            "date_joined": "2020-08-28T14:51:39.989Z",
+            "is_active": true
         }
     }
 ]
