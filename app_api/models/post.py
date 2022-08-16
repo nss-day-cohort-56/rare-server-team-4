@@ -12,3 +12,4 @@ class Post(models.Model):
         width_field=None, max_length=None, null=True)
     content = models.CharField(max_length=100)
     approved = models.BooleanField()
+    tags = models.ManyToManyField("Tag", through="PostTag", related_name="posts")
