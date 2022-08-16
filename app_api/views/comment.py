@@ -25,7 +25,7 @@ class CommentView(ViewSet):
         Returns:
             Response -- JSON serialized list of comments
         """
-        comments = Comment.objects.all()
+        comments = Comment.objects.all().order_by("date")
         comment_post = request.query_params.get('post_id', None)
         if comment_post is not None:
             comments = comments.filter(post_id=comment_post)
