@@ -40,10 +40,13 @@ class PostView(ViewSet):
                 Q(title__contains=search_text)
             )
 
-        category = request.query_params.get('category', None)
+        category = request.query_params.get('category_id', None)
+        user = self.request.query_params.get('user_id', None)
 
         if category is not None:
             posts = posts.filter(category_id=category)
+        if user is not None:
+            posts = posts.filter(user_id=user)
 
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
@@ -55,7 +58,7 @@ class PostView(ViewSet):
             Response -- JSON serialized post instance
         """
         user = RareUser.objects.get(user=request.auth.user)
-        category = Category.objects.get(pk=request.data["category_id"])
+        category = Category.objects.get(pk=request.data["category"])
 
         post = Post.objects.create(
             user=user,
@@ -65,6 +68,7 @@ class PostView(ViewSet):
             content=request.data["content"],
             approved=False
         )
+        post.tags.set(request.data["tags"])
 
         if request.data["image_url"] is not None:
             post.image_url=request.data["image_url"]
@@ -84,13 +88,15 @@ class PostView(ViewSet):
         post = Post.objects.get(pk=pk)
         if user.id != post.user.id:
             return Response(None, status=status.HTTP_401_UNAUTHORIZED)
-        category = Category.objects.get(pk=request.data["category_id"])
+        category = Category.objects.get(pk=request.data["category"])
         post.category = category
         post.title = request.data["title"]
         post.publication_date = request.data["publication_date"]
         post.image_url = request.data["image_url"]
         post.content = request.data["content"]
         post.approved = request.data["approved"]
+
+        post.tags.set(request.data["tags"])
         
         post.save()
 
@@ -110,5 +116,5 @@ class PostSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Post
-        fields = ('id', 'user', 'category', 'title', 'publication_date', 'image_url', 'content','approved')
+        fields = ('id', 'user', 'category', 'title', 'publication_date', 'image_url', 'content', 'approved', 'tags')
         depth = 2
