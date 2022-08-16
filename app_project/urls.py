@@ -17,7 +17,9 @@ from django.contrib import admin
 from django.urls import path, include
 from app_api.views import register_user, login_user
 from rest_framework import routers
-from app_api.views import CategoryView, PostView, CommentView
+
+from app_api.views import CategoryView, PostView, ProfileView, CommentView
+
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -27,8 +29,10 @@ from app_api.views.tag import TagView
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'posts', PostView, 'post')
 router.register(r'categories', CategoryView, 'category')
+router.register(r'profiles', ProfileView, 'profile')
 router.register(r'tags', TagView, 'tag')
 router.register(r'comments', CommentView, 'comment')
+
 
 
 urlpatterns = [
