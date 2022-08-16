@@ -31,7 +31,6 @@ class PostView(ViewSet):
             Response -- JSON serialized list of posts
         """
         search_text = self.request.query_params.get('q', None)
-        # order_by = self.request.query_params.get('orderby', None)
 
         posts = Post.objects.all()
 
@@ -41,12 +40,15 @@ class PostView(ViewSet):
             )
 
         category = request.query_params.get('category_id', None)
+        tag = request.query_params.get('tag_id', None)
         user = self.request.query_params.get('user_id', None)
 
         if category is not None:
             posts = posts.filter(category_id=category)
         if user is not None:
             posts = posts.filter(user_id=user)
+        if tag is not None:
+            posts = posts.filter(tags=tag)
 
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
