@@ -18,6 +18,18 @@ class ProfileView(ViewSet):
 
         serializer = ProfileSerializer(profiles, many=True)
         return Response(serializer.data)
+    
+    def retrieve(self, request, pk):
+        """Handle GET requests for single profile
+        Returns:
+            Response -- JSON serialized profile"""
+        try:
+            profile = RareUser.objects.get(pk=pk)
+            serializer = ProfileSerializer(profile)
+            return Response(serializer.data)
+
+        except RareUser.DoesNotExist as ex:
+            return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
 
     def update(self, request, pk):
         """Handle PUT requests for a user
