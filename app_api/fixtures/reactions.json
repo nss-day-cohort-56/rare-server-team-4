@@ -1,0 +1,23 @@
+[
+    {
+        "model": "app_api.reaction",
+        "pk": 1,
+        "fields": {
+            "emoji": "✅"
+        }
+    },
+    {
+        "model": "app_api.reaction",
+        "pk": 2,
+        "fields": {
+            "emoji": "🧸"
+        }
+    },
+    {
+        "model": "app_api.reaction",
+        "pk": 3,
+        "fields": {
+            "emoji": "❌"
+        }
+    }
+]
