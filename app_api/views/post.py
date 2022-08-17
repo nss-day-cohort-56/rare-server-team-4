@@ -68,7 +68,7 @@ class PostView(ViewSet):
             title=request.data["title"],
             publication_date=request.data["publication_date"],
             content=request.data["content"],
-            approved=False
+            approved=request.data["approved"]
         )
         post.tags.set(request.data["tags"])
 
