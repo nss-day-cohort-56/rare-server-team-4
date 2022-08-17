@@ -32,6 +32,7 @@ router.register(r'categories', CategoryView, 'category')
 router.register(r'profiles', ProfileView, 'profile')
 router.register(r'tags', TagView, 'tag')
 router.register(r'comments', CommentView, 'comment')
+router.register(r'profileDetails', ProfileView, 'profile')
 
 
 
