@@ -13,3 +13,4 @@ class Post(models.Model):
     content = models.CharField(max_length=100)
     approved = models.BooleanField()
     tags = models.ManyToManyField("Tag", through="PostTag", related_name="posts")
+    reactions = models.ManyToManyField("Reaction", through="PostReaction", related_name="posts")
