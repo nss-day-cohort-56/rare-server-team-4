@@ -19,6 +19,21 @@ class ProfileView(ViewSet):
         serializer = ProfileSerializer(profiles, many=True)
         return Response(serializer.data)
 
+    def update(self, request, pk):
+        """Handle PUT requests for a user
+
+        Returns:
+            Response -- Empty body with 204 status code
+        """
+
+        user = RareUser.objects.get(pk=pk)
+        if user.user.is_staff is not true:
+            return Response(None, status=status.HTTP_401_UNAUTHORIZED)
+        user.user.is_active = request.data["user.is_active"]
+        user.save()
+
+        return Response(None, status=status.HTTP_204_NO_CONTENT)
+
 
 class ProfileSerializer(serializers.ModelSerializer):
     """JSON serializer for profiles
