@@ -11,7 +11,8 @@
             "last_name": "O'Brien",
             "email": "me@me.com",
             "date_joined": "2020-08-28T14:51:39.989Z",
-            "is_active": true
+            "is_active": true,
+            "is_staff": true
         }
     }
 ]
