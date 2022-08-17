@@ -88,7 +88,7 @@ class PostView(ViewSet):
         user = RareUser.objects.get(user=request.auth.user)
 
         post = Post.objects.get(pk=pk)
-        if user.id != post.user.id:
+        if user.id != post.user.id and user.user.is_staff == False:
             return Response(None, status=status.HTTP_401_UNAUTHORIZED)
         category = Category.objects.get(pk=request.data["category"])
         post.category = category
