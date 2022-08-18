@@ -40,13 +40,18 @@ class ProfileView(ViewSet):
         Returns:
             Response -- Empty body with 204 status code
         """
-        # currentUser = RareUser.objects.get(user=request.auth.user)
-        # if currentUser.user.is_staff is not True:
-        #     return Response(None, status=status.HTTP_401_UNAUTHORIZED)
+
     @action(methods=['PUT'], detail=True)
     def user_active(self, request, pk):
-        user = User.objects.get(pk=pk) #django
+        user = User.objects.get(pk=pk) 
         user.is_active = not user.is_active
+        user.save()
+        return Response(None, status=status.HTTP_204_NO_CONTENT)
+
+    @action(methods=['PUT'], detail=True)
+    def user_status(self, request, pk):
+        user = User.objects.get(pk=pk) 
+        user.is_staff = not user.is_staff
         user.save()
         return Response(None, status=status.HTTP_204_NO_CONTENT)
 
