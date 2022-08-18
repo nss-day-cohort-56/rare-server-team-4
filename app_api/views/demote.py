@@ -21,6 +21,19 @@ class DemoteView(ViewSet):
         except Demote.DoesNotExist as ex:
             return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND) 
 
+    def list(self, request):
+        """Handle GET requests to get all tags
+
+        Returns:
+            Response -- JSON serialized list of events
+        """
+        demotes = Demote.objects.all()
+        demoteUser = request.query_params.get('demoteUser', None)
+        if demoteUser is not None:
+            demotes = demotes.filter(demoteUser=demoteUser)
+        serializer = DemoteSerializer(demotes, many=True)
+        return Response(serializer.data)
+
     def create(self, request):
         """Handle POST operations
 
@@ -30,8 +43,8 @@ class DemoteView(ViewSet):
         user = RareUser.objects.get(user=request.auth.user)
 
         demote = Demote.objects.create(
-            demoteUser=request.data["demoteUser"],
-            approvedUser=user
+            demotedUser=request.data["demotedUser"],
+            approveUser=user
         )
 
         serializer = DemoteSerializer(demote)
