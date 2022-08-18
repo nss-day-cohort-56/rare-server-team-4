@@ -7,5 +7,23 @@
             "bio": "Me",
             "profile_image_url": ""
         }
+    },
+    {
+        "model": "app_api.rareuser",
+        "pk": 3,
+        "fields": {
+            "user": 3,
+            "bio": "Me",
+            "profile_image_url": ""
+        }
+    },
+    {
+        "model": "app_api.rareuser",
+        "pk": 4,
+        "fields": {
+            "user": 4,
+            "bio": "Me",
+            "profile_image_url": ""
+        }
     }
 ]
