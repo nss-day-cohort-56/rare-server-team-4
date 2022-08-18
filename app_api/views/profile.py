@@ -51,7 +51,7 @@ class ProfileView(ViewSet):
     @action(methods=['PUT'], detail=True)
     def user_status(self, request, pk):
         user = User.objects.get(pk=pk) 
-        user.is_staff = not user.is_staff
+        user.is_staff = request.data["is_staff"] #whats in the fetch body
         user.save()
         return Response(None, status=status.HTTP_204_NO_CONTENT)
 
