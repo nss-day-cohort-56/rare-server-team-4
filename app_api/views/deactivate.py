@@ -1,11 +1,11 @@
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
-from app_api.models import Demote
+from app_api.models import Deactivate
 from app_api.models import RareUser
 
 
-class DemoteView(ViewSet):
+class DeactivateView(ViewSet):
     """post view"""
 
     def retrieve(self, request, pk):
@@ -15,10 +15,10 @@ class DemoteView(ViewSet):
             Response -- JSON serialized post
         """
         try:
-            demote = Demote.objects.get(pk=pk)
-            serializer = DemoteSerializer(demote)
+            deactivate = Deactivate.objects.get(pk=pk)
+            serializer = DeactivateSerializer(deactivate)
             return Response(serializer.data)
-        except Demote.DoesNotExist as ex:
+        except Deactivate.DoesNotExist as ex:
             return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND) 
 
     def list(self, request):
@@ -27,11 +27,11 @@ class DemoteView(ViewSet):
         Returns:
             Response -- JSON serialized list of events
         """
-        demotes = Demote.objects.all()
-        demoteUser = request.query_params.get('demoteUser', None)
-        if demoteUser is not None:
-            demotes = demotes.filter(demoteUser=demoteUser)
-        serializer = DemoteSerializer(demotes, many=True)
+        deactivates = Deactivate.objects.all()
+        deactivatedUser = request.query_params.get('deactivatedUser', None)
+        if deactivatedUser is not None:
+            deactivates = deactivates.filter(deactivatedUser=deactivatedUser)
+        serializer = DeactivateSerializer(deactivates, many=True)
         return Response(serializer.data)
 
     def create(self, request):
@@ -42,12 +42,12 @@ class DemoteView(ViewSet):
         """
         user = RareUser.objects.get(user=request.auth.user)
 
-        demote = Demote.objects.create(
-            demotedUser=RareUser.objects.get(pk=request.data["demotedUser"]),
+        deactivate = Deactivate.objects.create(
+            deactivatedUser=RareUser.objects.get(pk=request.data["deactivatedUser"]),
             approveUser=user
         )
 
-        serializer = DemoteSerializer(demote)
+        serializer = DeactivateSerializer(deactivate)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def update(self, request, pk):
@@ -58,20 +58,20 @@ class DemoteView(ViewSet):
         """
         user = RareUser.objects.get(user=request.auth.user)
 
-        demote = Demote.objects.get(pk=pk)
-        if user.id == demote.approveUser:
+        deactivate = Deactivate.objects.get(pk=pk)
+        if user.id == deactivate.approveUser:
             return Response(None, status=status.HTTP_401_UNAUTHORIZED)
-        demote.secondApproveUser = user
-        demote.save()
+        deactivate.secondApproveUser = user
+        deactivate.save()
 
         return Response(None, status=status.HTTP_204_NO_CONTENT)
 
 
-class DemoteSerializer(serializers.ModelSerializer):
+class DeactivateSerializer(serializers.ModelSerializer):
     """JSON serializer for posts
     """
     
     class Meta:
-        model = Demote
-        fields = ('id', 'demotedUser', 'approveUser', 'secondApproveUser')
+        model = Deactivate
+        fields = ('id', 'deactivatedUser', 'approveUser', 'secondApproveUser')
         depth = 2

@@ -17,9 +17,10 @@ from django.contrib import admin
 from django.urls import path, include
 from app_api.views import register_user, login_user
 from rest_framework import routers
-from app_api.views import CategoryView, PostView, ProfileView, CommentView, ReactionView, TagView, DemoteView
+from app_api.views import CategoryView, PostView, ProfileView, CommentView, ReactionView, TagView, DemoteView, DeactivateView
 from django.conf import settings
 from django.conf.urls.static import static
+
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'posts', PostView, 'post')
@@ -28,6 +29,7 @@ router.register(r'profiles', ProfileView, 'profile')
 router.register(r'tags', TagView, 'tag')
 router.register(r'comments', CommentView, 'comment')
 router.register(r'demotes', DemoteView, 'demote')
+router.register(r'deactives', DeactivateView, 'deactive')
 
 router.register(r'profileDetails', ProfileView, 'profile')
 
