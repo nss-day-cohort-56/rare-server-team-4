@@ -4,6 +4,7 @@ from rest_framework import serializers, status
 from app_api.models import Post, Category
 from django.db.models import Q
 from app_api.models import RareUser, Category
+from django.core.files.base import ContentFile
 
 
 class PostView(ViewSet):
@@ -62,11 +63,17 @@ class PostView(ViewSet):
         user = RareUser.objects.get(user=request.auth.user)
         category = Category.objects.get(pk=request.data["category"])
 
+        # Add header image for post
+        format, imgstr = request.data["image_url"].split(';base64,')
+        ext = format.split('/')[-1]
+        data = ContentFile(base64.b64decode(imgstr), name=f'{request.data["title"]}-{uuid.uuid4()}.{ext}')
+
         post = Post.objects.create(
             user=user,
             category=category,
             title=request.data["title"],
             publication_date=request.data["publication_date"],
+            image_url=request.data["image_url"],
             content=request.data["content"],
             approved=request.data["approved"]
         )
