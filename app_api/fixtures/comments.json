@@ -4,10 +4,21 @@
         "pk": 1,
         "fields": {
             "subject": "Video Games",
-            "author_id": 1,
-            "post_id": 1,
+            "author": 1,
+            "post": 1,
             "content": "I disagree with this post.",
-            "date": "2022-09-01"
+            "created_on": "2022-09-01"
+        }
+    },
+    {
+        "model": "app_api.comment",
+        "pk": 1,
+        "fields": {
+            "subject": "Python",
+            "author": 1,
+            "post": 1,
+            "content": "I taught myself Python last year, such a cool language.",
+            "created_on": "2022-09-01"
         }
     }
 ]

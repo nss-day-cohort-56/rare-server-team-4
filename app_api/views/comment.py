@@ -6,6 +6,7 @@ from rest_framework import serializers, status
 from app_api.models import Comment
 from ..models.users import RareUser
 from ..models.post import Post
+import datetime
 
 class CommentView(ViewSet):
     """Rare Comment View"""
@@ -27,10 +28,10 @@ class CommentView(ViewSet):
         Returns:
             Response -- JSON serialized list of comments
         """
-        comments = Comment.objects.all().order_by("date")
-        comment_post = request.query_params.get('post_id', None)
-        if comment_post is not None:
-            comments = comments.filter(post_id=comment_post)
+        comments = Comment.objects.all().order_by("created_on")
+        post = request.query_params.get('post_id', None)
+        if post is not None:
+            comments = comments.filter(post_id=post)
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
 
@@ -43,11 +44,11 @@ class CommentView(ViewSet):
         
         comment = Comment.objects.create(
             #model    #client
-            post_id = post,
-            author_id = author,
+            post = post,
+            author = author,
             subject = request.data["subject"],
             content = request.data["content"],
-            date = request.data["date"]
+            created_on = datetime.date.today()
         )
         
         serializer = CommentSerializer(comment)
@@ -59,9 +60,10 @@ class CommentView(ViewSet):
         author = RareUser.objects.get(user=request.auth.user)
         
         comment = Comment.objects.get(pk=pk)
-        comment.author_id = author
+        comment.author = author
+        
         comment.content = request.data["content"]
-        comment.date = request.data["date"]
+        comment.subject = request.data["subject"]
 
         comment.save()
         
@@ -77,5 +79,5 @@ class CommentSerializer(serializers.ModelSerializer):
     """JSON serializer for comments"""
     class Meta:
         model = Comment
-        fields = ('id', 'subject', 'author_id', 'post_id', 'content', 'date')
+        fields = ('id', 'subject', 'author', 'post', 'content', 'created_on')
         depth = 2
