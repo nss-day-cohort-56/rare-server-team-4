@@ -14,5 +14,37 @@
             "is_active": true,
             "is_staff": true
         }
+    },
+    {
+        "model": "auth.user",
+        "pk": 3,
+        "fields": {
+            "password": "pbkdf2_sha256$216000$qMRH8szID7Z8$Vljya2V3XfruOHuvx1hGz9ZyKg4bxbw7rc2WO0gTR7I=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "admin",
+            "first_name": "Admin",
+            "last_name": "Admin",
+            "email": "me@me.com",
+            "date_joined": "2020-08-28T14:51:39.989Z",
+            "is_active": true,
+            "is_staff": true
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 4,
+        "fields": {
+            "password": "pbkdf2_sha256$216000$qMRH8szID7Z8$Vljya2V3XfruOHuvx1hGz9ZyKg4bxbw7rc2WO0gTR7I=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "admin2",
+            "first_name": "Admin2",
+            "last_name": "Admin2",
+            "email": "me@me.com",
+            "date_joined": "2020-08-28T14:51:39.989Z",
+            "is_active": true,
+            "is_staff": true
+        }
     }
 ]
