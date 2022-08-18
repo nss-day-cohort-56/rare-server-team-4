@@ -6,3 +6,4 @@ from .profile import ProfileView
 from .tag import TagView
 from .comment import CommentView
 from .reaction import ReactionView
+from .subscription import SubscriptionView

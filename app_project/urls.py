@@ -18,7 +18,7 @@ from django.urls import path, include
 from app_api.views import register_user, login_user
 from rest_framework import routers
 
-from app_api.views import CategoryView, PostView, ProfileView, CommentView, ReactionView, TagView
+from app_api.views import CategoryView, PostView, ProfileView, CommentView, ReactionView, TagView, SubscriptionView
 
 
 from django.conf import settings
@@ -34,6 +34,8 @@ router.register(r'comments', CommentView, 'comment')
 router.register(r'profileDetails', ProfileView, 'profile')
 
 router.register(r'reactions', ReactionView, 'reaction')
+
+router.register(r'subscriptions', SubscriptionView, 'subscription')
 
 
 
