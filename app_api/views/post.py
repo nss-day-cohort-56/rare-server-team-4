@@ -71,6 +71,7 @@ class PostView(ViewSet):
             approved=request.data["approved"]
         )
         post.tags.set(request.data["tags"])
+        post.reactions.set(request.data["reactions"])
 
         if request.data["image_url"] is not None:
             post.image_url=request.data["image_url"]
@@ -97,7 +98,7 @@ class PostView(ViewSet):
         post.image_url = request.data["image_url"]
         post.content = request.data["content"]
         post.approved = request.data["approved"]
-
+        post.reactions.set(request.data["reactions"])
         post.tags.set(request.data["tags"])
         
         post.save()
@@ -118,5 +119,5 @@ class PostSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Post
-        fields = ('id', 'user', 'category', 'title', 'publication_date', 'image_url', 'content', 'approved', 'tags')
+        fields = ('id', 'user', 'category', 'title', 'publication_date', 'image_url', 'content', 'approved', 'tags', 'reactions')
         depth = 2

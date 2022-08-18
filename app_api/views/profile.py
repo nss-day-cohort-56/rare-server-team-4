@@ -6,6 +6,9 @@ from rest_framework import serializers, status
 from app_api.models import RareUser
 from django.contrib.auth.models import User
 from rest_framework.decorators import action
+import uuid
+from django.core.files.base import ContentFile
+import base64
 
 
 class ProfileView(ViewSet):
@@ -40,13 +43,28 @@ class ProfileView(ViewSet):
         Returns:
             Response -- Empty body with 204 status code
         """
-        # currentUser = RareUser.objects.get(user=request.auth.user)
-        # if currentUser.user.is_staff is not True:
-        #     return Response(None, status=status.HTTP_401_UNAUTHORIZED)
+
     @action(methods=['PUT'], detail=True)
     def user_active(self, request, pk):
-        user = User.objects.get(pk=pk) #django
+        user = User.objects.get(pk=pk) 
         user.is_active = not user.is_active
+        user.save()
+        return Response(None, status=status.HTTP_204_NO_CONTENT)
+
+    @action(methods=['PUT'], detail=True)
+    def user_status(self, request, pk):
+        user = User.objects.get(pk=pk) 
+        user.is_staff = request.data["is_staff"] #whats in the fetch body
+        user.save()
+        return Response(None, status=status.HTTP_204_NO_CONTENT)
+
+    @action(methods=['PUT'], detail=True)
+    def user_image(self, request, pk):
+        user = RareUser.objects.get(pk=pk)
+        format, imgstr = request.data["profile_image_url"].split(';base64,')
+        ext = format.split('/')[-1]
+        data = ContentFile(base64.b64decode(imgstr), name=f'{user.id}-{uuid.uuid4()}.{ext}')
+        user.profile_image_url = data
         user.save()
         return Response(None, status=status.HTTP_204_NO_CONTENT)
 
