@@ -29,13 +29,6 @@ class SubscriptionView(ViewSet):
             author = author
         )
         
-        if subscription.subscriber == subscription.author:
-            return Response(None, status=status.HTTP_403_FORBIDDEN)
-        
-        if Subscription.objects.filter(subscriber = subscription.subscriber, author = subscription.author).exists():
-            return Response(None, status=status.HTTP_403_FORBIDDEN)
-            
-        
         serializer = SubscriptionSerializer(subscription)
         return Response(serializer.data)
     
@@ -44,7 +37,12 @@ class SubscriptionView(ViewSet):
         Returns:
             Response -- JSON serialized list of subscriptions
         """
-        
+        author = request.query_params.get('author', None)
+
         subscriptions = Subscription.objects.all()
+        
+        if author is not None:
+            subscriptions = subscriptions.filter(author_id=author)
+        
         serializer = SubscriptionSerializer(subscriptions, many=True)
         return Response(serializer.data)
