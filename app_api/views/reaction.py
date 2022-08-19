@@ -38,14 +38,13 @@ class ReactionView(ViewSet):
         Returns:
             Response --JSON serialized reaction instance
             """
-        # post = Post.objects.get(pk=request.data["post"])
+        if request.auth.user.is_staff:
+            reaction = Reaction.objects.create(
+                emoji=request.data["emoji"]
+            )
 
-        reaction = Reaction.objects.create(
-            emoji=request.data["emoji"]
-        )
-
-        serializer = ReactionSerializer(reaction)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+            serializer = ReactionSerializer(reaction)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     def update(self, request, pk):
         """Handle PUT requests for a reaction
@@ -53,19 +52,18 @@ class ReactionView(ViewSet):
         Returns:
             Response -- Empty body with 204 status code
             """
-        reaction = Reaction.objects.get(pk=pk)
-        reaction.emoji=request.data["emoji"]
+        if request.auth.user.is_staff:
+            reaction = Reaction.objects.get(pk=pk)
+            reaction.emoji=request.data["emoji"]
+            reaction.save()
 
-        # reaction_post = Post.objects.get(pk =request.data["post"])
-        # reaction.reaction_post = reaction_post
-        reaction.save()
-
-        return Response(None, status.HTTP_204_NO_CONTENT)
+            return Response(None, status.HTTP_204_NO_CONTENT)
 
     def destroy(self, request, pk):
-        reaction = Reaction.objects.get(pk=pk)
-        reaction.delete()
-        return Response(None, status=status.HTTP_204_NO_CONTENT)
+        if request.auth.user.is_staff:
+            reaction = Reaction.objects.get(pk=pk)
+            reaction.delete()
+            return Response(None, status=status.HTTP_204_NO_CONTENT)
 
 
 class ReactionSerializer(serializers.ModelSerializer):

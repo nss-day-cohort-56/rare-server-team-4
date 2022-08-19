@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import serializers, status
 from app_api.models import Tag
 from app_api.models.post import Post
+from app_api.models.users import RareUser
 
 
 class TagView(ViewSet):
@@ -39,14 +40,14 @@ class TagView(ViewSet):
         Returns:
             Response --JSON serialized tag instance
             """
-        # post = Post.objects.get(pk=request.data["post"])
 
-        tag = Tag.objects.create(
-            label=request.data["label"]
-        )
+        if request.auth.user.is_staff:
+            tag = Tag.objects.create(
+                label=request.data["label"]
+            )
 
-        serializer = TagSerializer(tag)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+            serializer = TagSerializer(tag)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     def update(self, request, pk):
         """Handle PUT requests for a tag
@@ -54,19 +55,18 @@ class TagView(ViewSet):
         Returns:
             Response -- Empty body with 204 status code
             """
-        tag = Tag.objects.get(pk=pk)
-        tag.label=request.data["label"]
+        if request.auth.user.is_staff:
+            tag = Tag.objects.get(pk=pk)
+            tag.label=request.data["label"]
+            tag.save()
 
-        # tag_post = Post.objects.get(pk =request.data["post"])
-        # tag.tag_post = tag_post
-        tag.save()
-
-        return Response(None, status.HTTP_204_NO_CONTENT)
+            return Response(None, status.HTTP_204_NO_CONTENT)
 
     def destroy(self, request, pk):
-        tag = Tag.objects.get(pk=pk)
-        tag.delete()
-        return Response(None, status=status.HTTP_204_NO_CONTENT)
+        if request.auth.user.is_staff:
+            tag = Tag.objects.get(pk=pk)
+            tag.delete()
+            return Response(None, status=status.HTTP_204_NO_CONTENT)
 
 
 class TagSerializer(serializers.ModelSerializer):

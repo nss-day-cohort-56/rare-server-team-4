@@ -106,10 +106,11 @@ class PostView(ViewSet):
         return Response(None, status=status.HTTP_204_NO_CONTENT)
 
     def destroy(self, request, pk):
-        post = Post.objects.get(pk=pk)
-        post.delete()
-        return Response(None, status=status.HTTP_204_NO_CONTENT)
-
+        if request.auth.user.is_staff:
+            post = Post.objects.get(pk=pk)
+            post.delete()
+            return Response(None, status=status.HTTP_204_NO_CONTENT)
+        
 
 
 

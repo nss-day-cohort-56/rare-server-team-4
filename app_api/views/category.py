@@ -13,12 +13,13 @@ class CategoryView(ViewSet):
         Returns
             Response -- JSON serialized game instance
         """
-        category = Category.objects.create(
-            label = request.data["label"]
-        )
-        
-        serializer = CategorySerializer(category)
-        return Response(serializer.data)
+        if request.auth.user.is_staff:
+            category = Category.objects.create(
+                label = request.data["label"]
+            )
+            
+            serializer = CategorySerializer(category)
+            return Response(serializer.data)
     
     def list(self, request):
         """Handle GET requests to get all categories
@@ -31,9 +32,10 @@ class CategoryView(ViewSet):
         return Response(serializer.data)
     
     def destroy(self, request, pk):
-        category = Category.objects.get(pk=pk)
-        category.delete()
-        return Response(None, status=status.HTTP_204_NO_CONTENT)
+        if request.auth.user.is_staff:
+            category = Category.objects.get(pk=pk)
+            category.delete()
+            return Response(None, status=status.HTTP_204_NO_CONTENT)
     
     def update(self, request, pk):
         """Handle PUT requests for a category
@@ -41,12 +43,12 @@ class CategoryView(ViewSet):
         Returns: 
             Response -- Empty body with 204 status code
         """
-        
-        category = Category.objects.get(pk=pk)
-        category.label = request.data["label"]
-        category.save()
-        
-        return Response(None, status=status.HTTP_204_NO_CONTENT)
+        if request.auth.user.is_staff:        
+            category = Category.objects.get(pk=pk)
+            category.label = request.data["label"]
+            category.save()
+            
+            return Response(None, status=status.HTTP_204_NO_CONTENT)
     
 class CategorySerializer(serializers.ModelSerializer):
     """JSON serializer for categories

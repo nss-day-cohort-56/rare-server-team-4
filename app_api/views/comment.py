@@ -72,8 +72,9 @@ class CommentView(ViewSet):
     def destroy(self, request, pk):
         """Delete Comment"""
         comment = Comment.objects.get(pk=pk)
-        comment.delete()
-        return Response(None, status=status.HTTP_204_NO_CONTENT)
+        if request.auth.user.is_staff or request.auth.user_id == comment.author_id:
+            comment.delete()
+            return Response(None, status=status.HTTP_204_NO_CONTENT)
 
 class CommentSerializer(serializers.ModelSerializer):
     """JSON serializer for comments"""
