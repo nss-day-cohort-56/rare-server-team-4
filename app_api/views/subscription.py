@@ -1,15 +1,17 @@
+from datetime import datetime
 from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
 from app_api.models import Subscription, RareUser
+import datetime
 
 class SubscriptionSerializer(serializers.ModelSerializer):
     """JSON serializer for subscriptions
     """
     class Meta: 
         model = Subscription
-        fields = ('id','subscriber','author','created_at')
+        fields = ('id','subscriber','author','created_at', 'unsubscribed_at', 'is_active')
         depth = 1
         
 class SubscriptionView(ViewSet):
@@ -26,7 +28,8 @@ class SubscriptionView(ViewSet):
         
         subscription = Subscription.objects.create(
             subscriber = subscriber,
-            author = author
+            author = author,
+            created_at = datetime.datetime.now()
         )
         
         serializer = SubscriptionSerializer(subscription)
@@ -46,3 +49,25 @@ class SubscriptionView(ViewSet):
         
         serializer = SubscriptionSerializer(subscriptions, many=True)
         return Response(serializer.data)
+
+    def update(self, request, pk):
+        """Handle PUT requests for a subscription
+
+        Returns:
+            Response -- Empty body with 204 status code
+        """
+
+        subscription = Subscription.objects.get(pk=pk)
+        subscription.subscriber_id = request.data["subscriber"]
+        subscription.author_id = request.data["author"]
+        subscription.created_at = request.data["created_at"]        
+        subscription.is_active = request.data["is_active"]
+        
+        if subscription.unsubscribed_at == None:
+            subscription.unsubscribed_at = datetime.datetime.now()
+        elif subscription.unsubscribed_at != None:
+            subscription.unsubscribed_at = None
+
+        subscription.save()
+
+        return Response(None, status=status.HTTP_204_NO_CONTENT)
