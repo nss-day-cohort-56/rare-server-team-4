@@ -4,6 +4,8 @@ from rest_framework import serializers, status
 from app_api.models import Post, Category
 from django.db.models import Q
 from app_api.models import RareUser, Category
+from django.core.files.base import ContentFile
+import uuid, base64
 
 
 class PostView(ViewSet):
@@ -62,20 +64,25 @@ class PostView(ViewSet):
         user = RareUser.objects.get(user=request.auth.user)
         category = Category.objects.get(pk=request.data["category"])
 
+        # Add header image for post
+        format, imgstr = request.data["image_url"].split(';base64,')
+        ext = format.split('/')[-1]
+        data = ContentFile(base64.b64decode(imgstr), name=f'{request.data["title"]}-{uuid.uuid4()}.{ext}')
+
+        user.image_url = data
+        user.save()
+
         post = Post.objects.create(
             user=user,
             category=category,
             title=request.data["title"],
             publication_date=request.data["publication_date"],
+            image_url=data,
             content=request.data["content"],
             approved=request.data["approved"]
         )
         post.tags.set(request.data["tags"])
         post.reactions.set(request.data["reactions"])
-
-        if request.data["image_url"] is not None:
-            post.image_url=request.data["image_url"]
-            post.save()
 
         serializer = PostSerializer(post)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -88,6 +95,11 @@ class PostView(ViewSet):
         """
         user = RareUser.objects.get(user=request.auth.user)
 
+        # Add header image for post
+        format, imgstr = request.data["image_url"].split(';base64,')
+        ext = format.split('/')[-1]
+        data = ContentFile(base64.b64decode(imgstr), name=f'{request.data["title"]}-{uuid.uuid4()}.{ext}')
+
         post = Post.objects.get(pk=pk)
         if user.id != post.user.id and user.user.is_staff == False:
             return Response(None, status=status.HTTP_401_UNAUTHORIZED)
@@ -95,7 +107,7 @@ class PostView(ViewSet):
         post.category = category
         post.title = request.data["title"]
         post.publication_date = request.data["publication_date"]
-        post.image_url = request.data["image_url"]
+        post.image_url = data,
         post.content = request.data["content"]
         post.approved = request.data["approved"]
         post.reactions.set(request.data["reactions"])
