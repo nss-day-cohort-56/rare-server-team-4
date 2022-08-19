@@ -6,3 +6,5 @@ from .tag import Tag
 from .comment import Comment
 from .reaction import Reaction
 from .post_reaction import PostReaction
+from .demote import Demote
+from .deactivate import Deactivate
