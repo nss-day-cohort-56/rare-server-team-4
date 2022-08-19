@@ -8,7 +8,7 @@
             "category": 1,
             "title": "Test Post",
             "publication_date": "2022-08-15",
-            "image_url": "",
+            "image_url": "base64 encoded string built in code above",
             "content": "Test Post Content",
             "approved": false 
         }
@@ -21,7 +21,7 @@
             "category": 2,
             "title": "Another Post",
             "publication_date": "2022-08-14",
-            "image_url": "",
+            "image_url": "base64 encoded string built in code above",
             "content": "Test Post Content",
             "approved": false 
         }
