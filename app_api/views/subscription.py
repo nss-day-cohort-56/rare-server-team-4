@@ -4,14 +4,24 @@ from rest_framework.response import Response
 from rest_framework import serializers, status
 from app_api.models import Subscription, RareUser
 
+
+class AuthorSerializer(serializers.ModelSerializer):
+    """JSON serializer for authors
+    """
+    class Meta: 
+        model = RareUser
+        fields = ('id','user','posts', 'profile_image_url')
+        depth = 1
 class SubscriptionSerializer(serializers.ModelSerializer):
     """JSON serializer for subscriptions
     """
+    author = AuthorSerializer()
     class Meta: 
         model = Subscription
         fields = ('id','subscriber','author','created_at')
         depth = 1
         
+
 class SubscriptionView(ViewSet):
     """Rare subscriptions view"""
     def create(self, request):
